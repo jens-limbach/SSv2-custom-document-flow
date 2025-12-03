@@ -4,6 +4,27 @@ A custom Angular component that visually mimics the SAPUI5 ProcessFlow, built na
 
 > 💡 **Want to recreate this application?** Check out [My-Prompt.md](./My-Prompt.md) - a comprehensive prompt that could be used to build this entire application from scratch with AI assistance.
 
+## 🎥 Video Demonstration
+
+**Watch the full demo and development walkthrough:**
+
+[![Document Flow Application Demo](https://img.shields.io/badge/▶️-Watch_Video-red?style=for-the-badge&logo=youtube)](https://sapvideo.cfapps.eu10-004.hana.ondemand.com/?entry_id=1_8qv0dybc)
+
+In this video, I demonstrate:
+- The finished application in action with real SAP C4C data
+- How the document flow visualization works
+- Interactive features (node expansion, quick view, navigation)
+- **Most importantly**: How I used AI and simple prompts to develop this entire application from scratch
+
+Even without deep Angular knowledge, you can build sophisticated applications like this by:
+1. Starting with a clear description of what you want
+2. Using AI to generate code iteratively
+3. Refining through conversation
+
+Watch the video to see the full development journey!
+
+---
+
 ## Live Application
 
 The application can be deployed to Cloud Foundry or any static web hosting service.
