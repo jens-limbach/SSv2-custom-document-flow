@@ -1,0 +1,162 @@
+<div class="document-flow-container">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading Document Flow...</p>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    <fd-icon glyph="alert" class="error-icon"></fd-icon>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Graph Container -->
+  <div *ngIf="!isLoading && !errorMessage" class="graph-wrapper">
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-title">Legend</div>
+      <div class="legend-items">
+        <div class="legend-item">
+          <div class="legend-color" style="border-color: var(--sapPositiveColor);"></div>
+          <span>Success / Active</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="border-color: var(--sapCriticalColor);"></div>
+          <span>Warning / Pending</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="border-color: var(--sapNegativeColor);"></div>
+          <span>Error / Blocked</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="border-color: var(--sapNeutralColor);"></div>
+          <span>Neutral / Info</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color current-indicator" style="border-left-color: var(--sap-content-icon-color);"></div>
+          <span>Current Object</span>
+        </div>
+      </div>
+    </div>
+
+    <ngx-graph
+      class="graph-chart"
+      [layout]="layout"
+      [layoutSettings]="layoutSettings"
+      [links]="links"
+      [nodes]="nodes"
+      [nodeHeight]="nodeHeight"
+      [nodeWidth]="nodeWidth"
+      [draggingEnabled]="false"
+    >
+      <!-- Custom Node Template -->
+      <ng-template #nodeTemplate let-node>
+        <svg:foreignObject
+          [attr.width]="nodeWidth"
+          [attr.height]="nodeHeight"
+        >
+          <xhtml:div
+            class="custom-node"
+            [class.current-node]="node.isCurrent"
+            [style.border-color]="getStatusColor(node.status)"
+            [style.background-color]="getStatusBackgroundColor(node.status)"
+            (click)="onNodeClick(node)"
+          >
+            <!-- Expand Icon (on right side) -->
+            <div 
+              *ngIf="node.hasMoreRelations"
+              class="expand-icon"
+              (click)="toggleNodeExpansion($event, node)"
+              [title]="node.isExpanded ? 'Collapse' : 'Expand to show more relations'"
+            >
+              <fd-icon 
+                [glyph]="node.isExpanded ? 'navigation-left-arrow' : 'navigation-right-arrow'"
+              ></fd-icon>
+            </div>
+            
+            <!-- Loading indicator for checking relations -->
+            <div 
+              *ngIf="node.isCheckingRelations"
+              class="expand-icon checking"
+              title="Checking for more relations..."
+            >
+              <div class="mini-spinner"></div>
+            </div>
+
+            <!-- Burger Menu -->
+            <div class="node-menu">
+              <fd-icon 
+                glyph="overflow" 
+                class="menu-icon"
+                (click)="toggleMenu($event, node.id)"
+              ></fd-icon>
+              <div class="menu-dropdown" [class.show]="isMenuOpen(node.id)">
+                <div class="menu-item" (click)="openListView($event, node)">
+                  <fd-icon glyph="list"></fd-icon>
+                  <span>Open List View</span>
+                </div>
+                <div class="menu-item" (click)="openQuickCreate($event, node)">
+                  <fd-icon glyph="add"></fd-icon>
+                  <span>+ Create</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Node Icon -->
+            <div class="node-icon-wrapper">
+              <fd-icon
+                [glyph]="node.icon"
+                class="node-icon"
+                [style.color]="getStatusColor(node.status)"
+              ></fd-icon>
+            </div>
+
+            <!-- Node Content -->
+            <div class="node-content">
+              <div class="node-title" [title]="node.label">{{ node.label }}</div>
+              <div class="node-subtitle">
+                <fd-icon glyph="tag" class="subtitle-icon"></fd-icon>
+                <span class="object-id-link" (click)="onIdClick($event, node)">{{ node.objectDisplayId }}</span>
+              </div>
+            </div>
+          </xhtml:div>
+        </svg:foreignObject>
+      </ng-template>
+
+      <!-- Custom Link Template -->
+      <ng-template #linkTemplate let-link>
+        <svg:g class="edge">
+          <svg:path
+            class="line"
+            stroke-width="2"
+            [attr.marker-end]="'url(#arrow)'"
+          ></svg:path>
+        </svg:g>
+      </ng-template>
+
+      <!-- Arrow Marker Definition -->
+      <ng-template #defsTemplate>
+        <svg:defs>
+          <svg:marker
+            id="arrow"
+            viewBox="0 -5 10 10"
+            refX="9"
+            refY="0"
+            markerWidth="8"
+            markerHeight="8"
+            orient="auto"
+          >
+            <svg:path
+              d="M0,-5L10,0L0,5"
+              class="arrow-head"
+              fill="var(--sapNeutralBorderColor, #89919a)"
+            ></svg:path>
+          </svg:marker>
+        </svg:defs>
+      </ng-template>
+    </ngx-graph>
+  </div>
+</div>

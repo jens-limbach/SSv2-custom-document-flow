@@ -1,0 +1,11 @@
+---
+applications:
+- name: customdocflow-ui
+  memory: 256M
+  disk_quota: 64M
+  instances: 1
+  buildpacks:
+    - https://github.com/cloudfoundry/staticfile-buildpack.git
+  path: dist/customdocflow-ui/browser
+  env:
+    FORCE_HTTPS: true

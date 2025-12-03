@@ -1,0 +1,20 @@
+/* Import Fundamental Styles via CDN reference for proper font loading */
+@import url('https://unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css');
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: '72', '72full', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f6f7;
+}
+
+html, body {
+  height: 100%;
+}
